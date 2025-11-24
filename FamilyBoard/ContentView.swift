@@ -7,11 +7,16 @@
 
 import SwiftUI
 
+struct BoardNote {
+    let text: String
+    let userName: String
+}
+
 struct ContentView: View {
     @State private var selectedUser: String?
     @State private var isShowingQuickNote = false
     @State private var isShowingBoard = false
-    @State private var boardNotes: [String] = []
+    @State private var boardNotes: [BoardNote] = []
 
     var body: some View {
         ZStack {
@@ -72,7 +77,8 @@ struct ContentView: View {
                     },
                     onSelectNote: { note in
                         isShowingQuickNote = false
-                        boardNotes.append(note)
+                        let user = selectedUser ?? ""
+                        boardNotes.append(BoardNote(text: note, userName: user))
                         isShowingBoard = true
                     }
                 )
@@ -423,13 +429,13 @@ struct QuickNoteButton: View {
 }
 
 struct BoardScreen: View {
-    let notes: [String]
+    let notes: [BoardNote]
     let userName: String
     let onAddNote: () -> Void
     let onDeleteNote: (Int) -> Void
     let onBack: () -> Void
 
-    private var noteBaseColor: Color {
+    private func color(for userName: String) -> Color {
         switch userName {
         case "Dad":
             return Color(red: 0xE9/255, green: 0xF9/255, blue: 0xE5/255) // #E9F9E5
@@ -472,9 +478,10 @@ struct BoardScreen: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(alignment: .top, spacing: 28) {
                         ForEach(Array(notes.enumerated()), id: \.offset) { index, note in
+                            let baseColor = color(for: note.userName)
                             StickyNoteView(
-                                text: note,
-                                color: index % 2 == 0 ? noteBaseColor : noteBaseColor.opacity(0.8),
+                                text: note.text,
+                                color: index % 2 == 0 ? baseColor : baseColor.opacity(0.8),
                                 onDelete: { onDeleteNote(index) }
                             )
                         }
