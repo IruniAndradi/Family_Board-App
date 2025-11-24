@@ -27,6 +27,10 @@ struct ContentView: View {
                         onDeleteNote: { index in
                             guard boardNotes.indices.contains(index) else { return }
                             boardNotes.remove(at: index)
+                        },
+                        onBack: {
+                            print("=== Back button tapped on BoardScreen ===")
+                            isShowingQuickNote = true
                         }
                     )
                 } else {
@@ -136,6 +140,42 @@ struct KeyboardKey: View {
                 )
         }
         .buttonStyle(.plain)
+    }
+}
+
+struct BackButtonView: View {
+    let action: () -> Void
+    @State private var isFocused: Bool = false
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "arrow.left")
+                .font(.system(size: 24, weight: .bold))
+                .foregroundColor(.black)
+
+            Text("Back")
+                .font(.system(size: 24, weight: .semibold))
+                .foregroundColor(.black)
+        }
+        .padding(.horizontal, 26)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .fill(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .stroke(Color.black, lineWidth: 4)
+                )
+                .shadow(color: .black.opacity(0.9), radius: 0, x: 8, y: 8)
+        )
+        .scaleEffect(isFocused ? 1.05 : 1.0)
+        .focusable(true) { focused in
+            isFocused = focused
+        }
+        .onTapGesture {
+            print("BackButtonView tapped")
+            action()
+        }
     }
 }
 
@@ -340,6 +380,7 @@ struct BoardScreen: View {
     let userName: String
     let onAddNote: () -> Void
     let onDeleteNote: (Int) -> Void
+    let onBack: () -> Void
 
     private var noteBaseColor: Color {
         switch userName {
@@ -361,18 +402,19 @@ struct BoardScreen: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 HStack {
+                    BackButtonView(action: onBack)
+                        .padding(.leading, 40)
+                    Spacer()
                     Text("FamilyBoard")
                         .font(.system(size: 40, weight: .bold))
                         .foregroundColor(.black)
                     Spacer()
-                    // Placeholder for user avatar
                     Circle()
                         .fill(Color.white)
                         .frame(width: 60, height: 60)
                         .overlay(Circle().stroke(Color.black, lineWidth: 3))
                         .padding(.trailing, 40)
                 }
-                .padding(.horizontal, 40)
                 .padding(.top, 30)
 
                 Rectangle()
