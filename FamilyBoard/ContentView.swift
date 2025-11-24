@@ -475,8 +475,11 @@ struct BoardScreen: View {
                     .frame(height: 4)
                     .padding(.top, 6)
 
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(alignment: .top, spacing: 28) {
+                // Grid of sticky notes: 5 columns per row, wrapping onto new rows
+                let columns = Array(repeating: GridItem(.fixed(320), spacing: 28), count: 5)
+
+                ScrollView(.vertical, showsIndicators: false) {
+                    LazyVGrid(columns: columns, alignment: .leading, spacing: 28) {
                         ForEach(Array(notes.enumerated()), id: \.offset) { index, note in
                             let baseColor = color(for: note.userName)
                             StickyNoteView(
