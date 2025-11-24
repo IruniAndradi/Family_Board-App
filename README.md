@@ -1,104 +1,127 @@
 
 # FamilyBoard (tvOS)
 
-FamilyBoard is a simple, TV‑friendly digital notice board for families on **Apple TV (tvOS)**.  
-It lets each family member select their profile, add quick sticky notes, and view all notes together on a big “board” screen using the Apple TV remote.
+FamilyBoard is a TV‑friendly digital notice board for families on **Apple TV (tvOS)**.  
+Each family member chooses their profile, adds quick sticky notes, and sees all notes together on a big shared board.
 
-The UI is built for tvOS with large, clear elements and focus states for directional/remote navigation.
+The UI is built with **SwiftUI** and designed for tvOS focus navigation (Apple TV remote): large targets, clear focus outlines, and high-contrast pastel colors.
 
 ---
 
 ## Features
 
-- **Profile selection screen (tvOS-optimized)**
-  - “Who’s using FamilyBoard?” prompt.
-  - Three user cards: **Dad**, **Mom**, **Kid**.
-  - Each user card has its own accent color and a focus highlight when selected with the remote.
+### Screen 1 – User Selection
 
-- **Quick note selection (Screen 2)**
-  - Preset “quick note” buttons on two columns, such as:
-    - BUY MILK, GOOD LUCK!, I’M HOME  
-    - CALL ME, FEED THE DOG, RUNNING LATE
-  - Simple **custom note input**:
-    - Text field for typing a message.
-    - Custom **on‑screen keyboard** built in SwiftUI (A–Z, SPACE, DELETE).
-    - “ADD” button to send the custom note to the board.
-  - “Back” and “Cancel” actions to leave this overlay and return with the remote.
+- **Prompt**: “Who’s using FamilyBoard?”
+- **Profiles**:
+  - **Dad**
+  - **Mom**
+  - **Kid**
+- **Design**:
+  - Solid **white** background for a clean look.
+  - Each user card has a unique accent color and a bold border.
+  - Focus state:
+    - Yellow/colored outline and subtle scale effect when focused with the Apple TV remote.
 
-- **Board screen (Screen 3)**
-  - Displays all notes as **sticky notes** arranged in a `LazyVGrid` (5 columns per row).
-  - Notes are color‑coded by user:
-    - Dad: light green  
-    - Mom: light pink  
-    - Kid: light blue  
-    - Fallback: yellow
-  - Large **plus button** at the bottom‑right to add a new note (returns to Quick Note screen).
-  - Each sticky note shows:
-    - A “pin” SF Symbol icon at the top.
-    - The note text.
-    - A red trash button to delete the note.
-  - Sticky notes are focusable: focused note gets a yellow outline, making it easy to see what the remote is pointing at.
+### Screen 2 – Quick Note & Custom Note
 
-- **Session state**
-  - Notes are stored in memory in an array of `BoardNote` (text + userName).
-  - You can add and delete notes while the app is running on Apple TV.
+- **Quick notes (preset buttons)**:
+  - Left column: `BUY MILK`, `GOOD LUCK!`, `I'M HOME`
+  - Right column: `CALL ME`, `FEED THE DOG`, `RUNNING LATE`
+  - Each quick note is a **pastel sticky-style button**:
+    - Pastel purple, orange, and red variations.
+    - Thick black border and drop shadow for a “sticker” feel.
+
+- **Custom note input**:
+  - “Or write your own note:” section.
+  - Text field:
+    - Background color **`#D0C3F1`** (pastel purple).
+    - Rounded corners.
+    - Automatically focused when screen appears to bring up the tvOS keyboard.
+  - **ADD** button:
+    - Background color **`#FEF1AB`** (pastel yellow).
+    - Bold text, black border, and clear shadow.
+    - Adds the trimmed text as a new note on the board.
+
+- **On-screen keyboard** (custom SwiftUI keyboard):
+  - Rows of A–Z letters.
+  - **Space** and **Delete** keys:
+    - Background color **`#AFD9AE`** (pastel green).
+  - All letter keys:
+    - Background color **`#FFCC99`** (pastel orange).
+  - Each key:
+    - Black text, black border, and a subtle shadow.
+    - Sized for comfortable tvOS remote selection.
+
+- **CANCEL button**:
+  - Background color **`#FEF1AB`** (same pastel yellow as ADD).
+  - Black text with a black border and top padding.
+  - Returns to the previous state (closes the Quick Note overlay).
+
+### Screen 3 – Board (Sticky Notes)
+
+- **Board layout**:
+  - Large grid of sticky notes built with `LazyVGrid`.
+  - Fixed-size note tiles arranged in **5 columns** with spacing.
+
+- **Sticky notes**:
+  - Coloring based on the note’s `userName`:
+    - **Dad**: `#E9F9E5` (light green).
+    - **Mom**: `#FFD7EE` (light pink).
+    - **Kid**: `#CEEEF8` (light blue).
+    - Default / other: yellow-ish.
+  - Design:
+    - Rounded rectangle with drop shadow (paper note look).
+    - A `pin.fill` SF Symbol at the top-right.
+    - Note text centered under the pin.
+  - Each note includes a **red delete button**:
+    - Red background, white border, and a trash icon.
+    - Activating it removes that note from the board.
+
+- **Board controls**:
+  - Top bar:
+    - Back button on the left.
+    - “FamilyBoard” title in the center.
+    - Circular profile placeholder on the right.
+  - Bottom-right **Plus** button:
+    - Blue circular button with a black-bordered outline and drop shadow.
+    - Tapping returns to Screen 2 to add a new note.
 
 ---
 
-## Screens & Flow (tvOS)
+## App Flow
 
-1. **Screen 1 – User Selection**
-   - The user uses the **Apple TV remote** to move focus between **Dad**, **Mom**, and **Kid**.
-   - Selecting a user opens the **QuickNoteScreen** overlay.
+1. **Start at Screen 1**  
+   User chooses **Dad**, **Mom**, or **Kid** via the Apple TV remote.
 
-2. **Screen 2 – Quick Notes / Custom Note**
+2. **Go to Screen 2 (Quick Note)**  
+   - User picks:
+     - One of the preset quick-note buttons, **or**
+     - Types a custom note with the colored text field and on-screen keyboard.
+   - Presses **ADD** to confirm, or **CANCEL** to go back without adding.
+
+3. **Go to Screen 3 (Board)**  
+   - The new note is added to `boardNotes` and appears as a sticky note.
    - User can:
-     - Pick one of the preset quick notes with the remote.
-     - Type a custom note using the text field and on‑screen keyboard.
-   - After choosing/adding a note:
-     - A new sticky note is created for the selected user.
-     - The app navigates to the **BoardScreen**, showing the updated board.
-   - “CANCEL” or the back button closes the quick note overlay and returns to the previous state.
+     - Add more notes via the Plus button (returns to Screen 2).
+     - Delete notes using each note’s trash button.
+     - Use the back button to return to Screen 2.
 
-3. **Screen 3 – Board**
-   - All notes created in the session are displayed in a grid of sticky notes.
-   - The **plus button** at the bottom‑right opens the QuickNote overlay again to add more notes.
-   - Each note has a **trash icon**; activating it removes that note from the board.
+All state is held in memory while the app runs; notes are not persisted across app restarts yet.
 
 ---
 
 ## Technical Overview
 
-- **Platform**: **tvOS** application using **SwiftUI**.
-- **Main file**: [FamilyBoard/ContentView.swift](cci:7://file:///Users/student/Desktop/IRUNI/FamilyBoard/FamilyBoard/ContentView.swift:0:0-0:0)
+### Tech Stack
+
+- **Platform**: tvOS
+- **UI Framework**: SwiftUI
 - **Language**: Swift
 
-### Architecture & Main Views
+### Main Types
 
-- **Root view**: `ContentView`
-  - Manages global UI state and navigation:
-    - `@State private var selectedUser: String?`
-    - `@State private var isShowingQuickNote: Bool`
-    - `@State private var isShowingBoard: Bool`
-    - `@State private var boardNotes: [BoardNote]`
-  - Decides whether to show:
-    - User selection screen
-    - BoardScreen
-    - QuickNoteScreen overlay
-
-- **Supporting views**:
-  - `UserCard` – cards for Dad/Mom/Kid with focus highlights.
-  - `QuickNoteScreen` – overlay for selecting preset notes or adding a custom note.
-    - `QuickNoteButton` – styled buttons for each quick note.
-    - `OnScreenKeyboardView` and `KeyboardKey` – custom keyboard for tvOS.
-    - `QuickNoteBackButtonView` – back button with focus outline.
-  - `BoardScreen` – the main sticky note board.
-    - `StickyNoteView` – each individual sticky note with pin icon and trash button.
-    - `BackButtonView` – back button on the board screen.
-    - `PlusButtonView` – large circular button to add a new note.
-    - `FocusableNoteContainer` – reusable wrapper to add focus outline behavior.
-
-### Data Model
+- **Model**
 
 ```swift
 struct BoardNote {
