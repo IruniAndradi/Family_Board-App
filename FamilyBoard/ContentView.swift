@@ -230,14 +230,14 @@ struct UserCard: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            let isHighlighted = isSelected || isFocused
+            let isHighlighted = isFocused
 
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .fill(isHighlighted ? accentColor.opacity(0.25) : Color.white)
                 .overlay(
                     RoundedRectangle(cornerRadius: 16, style: .continuous)
                         .stroke(isHighlighted ? accentColor : Color.black,
-                                lineWidth: isSelected ? 6 : (isFocused ? 5 : 4))
+                                lineWidth: isFocused ? 6 : 4)
                 )
                 .shadow(color: (isHighlighted ? accentColor : Color.black).opacity(0.7), radius: 0, x: 10, y: 10)
 
