@@ -471,9 +471,9 @@ struct PlusButtonView: View {
                     .frame(width: 84, height: 84)
                     .offset(x: 6, y: 6)
 
-                // Main blue button circle
+                // Main red button circle
                 Circle()
-                    .fill(Color.cyan)
+                    .fill(Color.red)
                     .frame(width: 80, height: 80)
                     .overlay(
                         Circle()
