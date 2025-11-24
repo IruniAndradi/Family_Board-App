@@ -39,7 +39,7 @@ struct ContentView: View {
                         }
                     )
                 } else {
-                    Color.gray.opacity(0.15)
+                    Color.white
                         .ignoresSafeArea()
                     VStack(spacing: 80) {
                         Text("Who's using FamilyBoard?")
