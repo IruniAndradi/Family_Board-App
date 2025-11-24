@@ -621,6 +621,11 @@ struct FocusableNoteContainer<Content: View>: View {
             .focusable(true) { focused in
                 isFocused = focused
             }
+            .onTapGesture {
+                if isFocused {
+                    onActivate()
+                }
+            }
     }
 }
 
