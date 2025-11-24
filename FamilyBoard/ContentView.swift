@@ -484,7 +484,7 @@ struct BoardScreen: View {
                             let baseColor = color(for: note.userName)
                             StickyNoteView(
                                 text: note.text,
-                                color: index % 2 == 0 ? baseColor : baseColor.opacity(0.8),
+                                color: baseColor,
                                 onDelete: { onDeleteNote(index) }
                             )
                         }
@@ -612,7 +612,7 @@ struct FocusableNoteContainer<Content: View>: View {
 
     var body: some View {
         content
-            .scaleEffect(isFocused ? 1.03 : 1.0)
+            .scaleEffect(1.0)
             .overlay(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
                     .stroke(isFocused ? Color.yellow : Color.clear,
