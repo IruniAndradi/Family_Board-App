@@ -294,6 +294,19 @@ struct QuickNoteScreen: View {
     @FocusState private var isTextFieldFocused: Bool
     @State private var hasInitiallyFocusedField: Bool = false
 
+    private func quickNoteColor(for title: String) -> Color {
+        switch title {
+        case "BUY MILK", "CALL ME":
+            return Color(red: 0.98, green: 0.90, blue: 1.0) // pastel purple
+        case "GOOD LUCK!", "FEED THE DOG":
+            return Color(red: 1.0, green: 0.95, blue: 0.85) // pastel orange
+        case "I'M HOME", "RUNNING LATE":
+            return Color(red: 1.0, green: 0.88, blue: 0.88) // pastel red
+        default:
+            return Color(red: 1.0, green: 0.97, blue: 0.88)
+        }
+    }
+
     var body: some View {
         ZStack {
             Color.black.opacity(0.4)
@@ -317,14 +330,14 @@ struct QuickNoteScreen: View {
                     HStack(spacing: 80) {
                         VStack(spacing: 30) {
                             ForEach(leftNotes, id: \.self) { title in
-                                QuickNoteButton(title: title) {
+                                QuickNoteButton(title: title, backgroundColor: quickNoteColor(for: title)) {
                                     onSelectNote(title)
                                 }
                             }
                         }
                         VStack(spacing: 30) {
                             ForEach(rightNotes, id: \.self) { title in
-                                QuickNoteButton(title: title) {
+                                QuickNoteButton(title: title, backgroundColor: quickNoteColor(for: title)) {
                                     onSelectNote(title)
                                 }
                             }
@@ -341,7 +354,7 @@ struct QuickNoteScreen: View {
                                 .font(.system(size: 24))
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 10)
-                                .background(Color.white)
+                                .background(Color(red: 208.0/255.0, green: 195.0/255.0, blue: 241.0/255.0)) // #D0C3F1
                                 .cornerRadius(4)
                                 .focused($isTextFieldFocused)
 
@@ -357,7 +370,7 @@ struct QuickNoteScreen: View {
                                     .foregroundColor(.black)
                                     .padding(.horizontal, 20)
                                     .padding(.vertical, 10)
-                                    .background(Color.white)
+                                    .background(Color(red: 254.0/255.0, green: 241.0/255.0, blue: 171.0/255.0)) // #FEF1AB
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 4)
                                             .stroke(Color.black, lineWidth: 3)
@@ -406,6 +419,7 @@ struct QuickNoteScreen: View {
 
 struct QuickNoteButton: View {
     let title: String
+    let backgroundColor: Color
     let action: () -> Void
 
     var body: some View {
@@ -416,7 +430,7 @@ struct QuickNoteButton: View {
                 .frame(width: 320, height: 70)
                 .background(
                     RoundedRectangle(cornerRadius: 2, style: .continuous)
-                        .fill(Color.white)
+                        .fill(backgroundColor)
                         .overlay(
                             RoundedRectangle(cornerRadius: 2, style: .continuous)
                                 .stroke(Color.black, lineWidth: 4)
