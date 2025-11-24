@@ -545,20 +545,17 @@ struct StickyNoteView: View {
                     Spacer()
                     HStack {
                         Spacer()
-                        Button(action: onDelete) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                    .fill(Color.red)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                            .stroke(Color.white, lineWidth: 3)
-                                    )
-                                Image(systemName: "trash")
-                                    .font(.system(size: 20, weight: .bold))
-                                    .foregroundColor(.white)
-                            }
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .fill(Color.red)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                        .stroke(Color.white, lineWidth: 3)
+                                )
+                            Image(systemName: "trash")
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundColor(.white)
                         }
-                        .buttonStyle(.plain)
                         .frame(width: 44, height: 44)
                         .padding(.trailing, 16)
                         .padding(.bottom, 14)
