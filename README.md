@@ -1,4 +1,4 @@
-# Family_Board-App
+
 # FamilyBoard (tvOS)
 
 FamilyBoard is a simple, TV‑friendly digital notice board for families on **Apple TV (tvOS)**.  
