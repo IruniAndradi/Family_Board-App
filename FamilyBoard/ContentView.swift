@@ -178,7 +178,11 @@ struct KeyboardKey: View {
                 .frame(width: title.count > 1 ? 90 : 50, height: 44)
                 .background(
                     RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .fill(Color.white)
+                        .fill(
+                            (title == "SPACE" || title == "DELETE")
+                            ? Color(red: 175.0/255.0, green: 217.0/255.0, blue: 174.0/255.0) // #AFD9AE
+                            : Color(red: 255.0/255.0, green: 204.0/255.0, blue: 153.0/255.0) // #FFCC99
+                        )
                         .overlay(
                             RoundedRectangle(cornerRadius: 6, style: .continuous)
                                 .stroke(Color.black, lineWidth: 3)
@@ -387,6 +391,13 @@ struct QuickNoteScreen: View {
                         Text("CANCEL")
                             .font(.system(size: 22, weight: .semibold))
                             .foregroundColor(.black)
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 10)
+                            .background(Color(red: 254.0/255.0, green: 241.0/255.0, blue: 171.0/255.0)) // #FEF1AB
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .stroke(Color.black, lineWidth: 3)
+                            )
                             .padding(.top, 20)
                     }
                     .buttonStyle(.plain)
