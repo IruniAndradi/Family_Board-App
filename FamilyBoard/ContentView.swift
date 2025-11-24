@@ -394,6 +394,9 @@ struct BoardScreen: View {
                 }
             }
         }
+        .onAppear {
+            print("=== BoardScreen appeared, notes count: \(notes.count) ===")
+        }
     }
 }
 
@@ -460,37 +463,35 @@ struct PlusButtonView: View {
     @State private var isFocused: Bool = false
 
     var body: some View {
-        Button(action: {
-            print("PlusButtonView tapped")
-            action()
-        }) {
-            ZStack {
-                // Black shadow circle behind
-                Circle()
-                    .fill(Color.black)
-                    .frame(width: 84, height: 84)
-                    .offset(x: 6, y: 6)
+        ZStack {
+            // Black shadow circle behind
+            Circle()
+                .fill(Color.black)
+                .frame(width: 84, height: 84)
+                .offset(x: 6, y: 6)
 
-                // Main red button circle
-                Circle()
-                    .fill(Color.red)
-                    .frame(width: 80, height: 80)
-                    .overlay(
-                        Circle()
-                            .stroke(isFocused ? Color.yellow : Color.black,
-                                    lineWidth: isFocused ? 6 : 4)
-                    )
-                    .overlay(
-                        Image(systemName: "plus")
-                            .font(.system(size: 32, weight: .bold))
-                            .foregroundColor(.black)
-                    )
-            }
-            .scaleEffect(isFocused ? 1.08 : 1.0)
+            // Main blue button circle
+            Circle()
+                .fill(Color.blue)
+                .frame(width: 80, height: 80)
+                .overlay(
+                    Circle()
+                        .stroke(isFocused ? Color.yellow : Color.black,
+                                lineWidth: isFocused ? 6 : 4)
+                )
+                .overlay(
+                    Image(systemName: "plus")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(.black)
+                )
         }
-        .buttonStyle(.plain)
+        .scaleEffect(isFocused ? 1.08 : 1.0)
         .focusable(true) { focused in
             isFocused = focused
+        }
+        .onTapGesture {
+            print("PlusButtonView tapped via onTapGesture")
+            action()
         }
     }
 }
@@ -503,6 +504,11 @@ struct FocusableNoteContainer<Content: View>: View {
     var body: some View {
         content
             .scaleEffect(isFocused ? 1.03 : 1.0)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .stroke(isFocused ? Color.yellow : Color.clear,
+                            lineWidth: isFocused ? 5 : 0)
+            )
             .focusable(true) { focused in
                 isFocused = focused
             }
