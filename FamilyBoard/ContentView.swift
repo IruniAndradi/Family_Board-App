@@ -341,6 +341,19 @@ struct BoardScreen: View {
     let onAddNote: () -> Void
     let onDeleteNote: (Int) -> Void
 
+    private var noteBaseColor: Color {
+        switch userName {
+        case "Dad":
+            return Color(red: 0xE9/255, green: 0xF9/255, blue: 0xE5/255) // #E9F9E5
+        case "Mom":
+            return Color(red: 0xFF/255, green: 0xD7/255, blue: 0xEE/255) // #FFD7EE
+        case "Kid":
+            return Color(red: 0xCE/255, green: 0xEE/255, blue: 0xF8/255) // #CEEEF8
+        default:
+            return Color.yellow.opacity(0.9)
+        }
+    }
+
     var body: some View {
         ZStack(alignment: .topLeading) {
             Color.white
@@ -372,7 +385,7 @@ struct BoardScreen: View {
                         ForEach(Array(notes.enumerated()), id: \.offset) { index, note in
                             StickyNoteView(
                                 text: note,
-                                color: index % 2 == 0 ? Color.yellow.opacity(0.9) : Color(red: 0.75, green: 0.9, blue: 1.0),
+                                color: index % 2 == 0 ? noteBaseColor : noteBaseColor.opacity(0.8),
                                 onDelete: { onDeleteNote(index) }
                             )
                         }
