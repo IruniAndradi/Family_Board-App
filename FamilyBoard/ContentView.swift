@@ -68,6 +68,7 @@ struct ContentView: View {
                 QuickNoteScreen(
                     onCancel: {
                         isShowingQuickNote = false
+                        isShowingBoard = false
                     },
                     onSelectNote: { note in
                         isShowingQuickNote = false
@@ -78,6 +79,46 @@ struct ContentView: View {
                 .transition(.opacity)
                 .zIndex(1)
             }
+        }
+    }
+}
+
+// Back button variant specifically for Screen 2 (QuickNote), using Button
+struct QuickNoteBackButtonView: View {
+    let action: () -> Void
+    @State private var isFocused: Bool = false
+
+    var body: some View {
+        Button(action: {
+            print("QuickNoteBackButtonView tapped")
+            action()
+        }) {
+            HStack(spacing: 10) {
+                Image(systemName: "arrow.left")
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundColor(.black)
+
+                Text("Back")
+                    .font(.system(size: 24, weight: .semibold))
+                    .foregroundColor(.black)
+            }
+            .padding(.horizontal, 26)
+            .padding(.vertical, 12)
+            .background(
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .fill(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .stroke(isFocused ? Color.yellow : Color.black,
+                                    lineWidth: isFocused ? 6 : 4)
+                    )
+                    .shadow(color: .black.opacity(0.9), radius: 0, x: 8, y: 8)
+            )
+            .scaleEffect(isFocused ? 1.05 : 1.0)
+        }
+        .buttonStyle(.plain)
+        .focusable(true) { focused in
+            isFocused = focused
         }
     }
 }
@@ -164,7 +205,8 @@ struct BackButtonView: View {
                 .fill(Color.white)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .stroke(Color.black, lineWidth: 4)
+                        .stroke(isFocused ? Color.yellow : Color.black,
+                                lineWidth: isFocused ? 6 : 4)
                 )
                 .shadow(color: .black.opacity(0.9), radius: 0, x: 8, y: 8)
         )
@@ -253,6 +295,11 @@ struct QuickNoteScreen: View {
 
             VStack {
                 VStack(spacing: 30) {
+                    HStack {
+                        QuickNoteBackButtonView(action: onCancel)
+                        Spacer()
+                    }
+
                     Text("ADD A QUICK NOTE")
                         .font(.system(size: 44, weight: .bold))
                         .foregroundColor(.black)
